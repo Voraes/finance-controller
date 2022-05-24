@@ -2,8 +2,9 @@ Oque esse projeto usa?
 
 + TypeScript
 + ReactJS
++ React-Modal
 + StyledComponents
 + MirageJS (pra fazer o front com uma API fake, mesmo sem o back)
-+
++ Axios
 +
 +
