@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import Modal from 'react-modal';
+
 import closeImg from '../../assets/close.svg'
 import incomeImg from '../../assets/income.svg'
 import outcomeImg from '../../assets/outcome.svg'
+import { useTransactions } from '../../hooks/useTransactions';
 import { Container, RadioBox, TransactionTypeContainer } from './styles';
 
 interface NewTransactionModalProps {
@@ -11,7 +13,29 @@ interface NewTransactionModalProps {
 }
 
 export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionModalProps) {
+    const { createTransaction } = useTransactions();
+
+    const [title, setTitle] = useState('');
+    const [amount, setAmount] = useState(0);
+    const [category, setCategory] = useState('');
     const [type, setType] = useState('deposit');
+
+    async function handleCreateNewTransaction(event: FormEvent) {
+        event.preventDefault() //Stop the submit button to reload the page every time he's clicked.
+
+        await createTransaction({
+            title,
+            amount,
+            category,
+            type,
+        })
+
+        setTitle('');
+        setAmount(0);
+        setCategory('');
+        setType('deposit');
+        onRequestClose();
+    }
 
     return (
         <Modal
@@ -28,16 +52,20 @@ export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionMo
                 <img src={closeImg} alt="Close Modal" />
             </button>
 
-            <Container>
+            <Container onSubmit={handleCreateNewTransaction}>
                 <h2>Register transaction</h2>
 
                 <input
                     placeholder='Title'
+                    value={title}
+                    onChange={event => setTitle(event.target.value)}
                 />
 
                 <input
                     type="number"
                     placeholder='Value'
+                    value={amount}
+                    onChange={event => setAmount(Number(event.target.value))}
                 />
 
                 <TransactionTypeContainer>
@@ -64,6 +92,8 @@ export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionMo
 
                 <input
                     placeholder='Category'
+                    value={category}
+                    onChange={event => setCategory(event.target.value)}
                 />
 
                 <button type="submit">Submit</button>
