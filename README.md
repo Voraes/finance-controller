@@ -1,6 +1,6 @@
 # Finance Controller
 
-#### This project was made for control incomes and expenses. Project for train React. 
+#### This project was made for control incomes and expenses. Project to practice React. 
 
   ## What was used in this project?
  - React
